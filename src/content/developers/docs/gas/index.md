@@ -95,6 +95,19 @@ To execute a transaction on the network, users can specify a maximum limit they 
 
 One of the main benefits of the London upgrade is improving the user's experience when setting transaction fees. For wallets that support the upgrade, instead of explicitly stating how much you are willing to pay to get your transaction through, wallet providers will automatically set a recommended transaction fee (base fee + recommended priority fee) to reduce the amount of complexity burdened onto their users.
 
+Find a summary of these fee calculations below
+
+| Parameter        |	Description	                                                       | Calculation                           |	Formula  |
+|------------------|---------------------------------------------------------------------|---------------------------------------|-----------|
+| Gas Used         |	The number of "Gas Units" used within a given block	               | Number	                               | X         |
+| Base Fee         |  The minimum Gas used per "Gas Unit" for a given block		           | Number	                               | Y         |
+| Priority Fee*    | 	The additional Gas offered per "Gas Unit" for a given transaction	 | Number 	                             | Z         |
+| Burnt Fees       |	The Gas burned within a given block	                               | =Gas Used * Base Fee	                 | =X*Y      |
+| Block Reward     |	The Gas paid as Priority fee within a given block	                 | =Gas Used * Priority Fee*	           | =X*Z      |
+| Transaction Fees |	The total fees paid by users for transactions within a given block | =Gas Used * (Base Fee + Priority Fee*)| =X*(Y+Z)  |
+
+*Priority Fee - This fee is paid on a per transaction basis, as such when calculating for a given block the average would be determined using the above formula.
+
 ## EIP-1559 {#eip-1559}
 
 The implementation of [EIP-1559](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1559.md) in the London Upgrade made the transaction fee mechanism more complex than the previous gas price auction, but it has the advantage of making gas fees more predictable, resulting in a more efficient transaction fee market. Users can submit transactions with a `maxFeePerGas` corresponding to how much they are willing to pay for the transaction to be executing, knowing that they will not pay more than the market price for gas (`baseFeePerGas`), and get any extra, minus their tip, refunded.
